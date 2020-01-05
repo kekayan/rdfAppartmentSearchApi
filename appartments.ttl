@@ -1,0 +1,77 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix swp:   <http://www.semanticwebprimer.org/ontology/apartments.ttl#> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
+@prefix dbpedia-owl: <http://dbpedia.org/ontology/> .
+
+# classes 
+swp:Person  a         rdfs:Class ;
+        rdfs:comment  "The class of people" .
+
+swp:Unit  a           rdfs:Class ;
+        rdfs:comment  "A self-contained section of accommodations in a larger building or group of buildings." .
+
+swp:ResidentialUnit  a   rdfs:Class ;
+        rdfs:comment     "The class of all units or places where people live." ;
+        rdfs:subClassOf  swp:Unit .
+
+swp:House  a             rdfs:Class ;
+        rdfs:comment     "The class of houses" ;
+        rdfs:subClassOf  swp:ResidentialUnit .
+
+swp:Apartment  a         rdfs:Class ;
+        rdfs:comments    "The class of apartments" ;
+        rdfs:subClassOf  swp:ResidentialUnit .
+
+#sub classes 
+
+swp:LuxuryApartment  rdfs:subClassOf  swp:Apartment .
+
+#property
+
+swp:address  a        rdfs:Property ;
+        rdfs:comment  "Is a property of units and takes literals as its value" ;
+        rdfs:domain   swp:Unit ;
+        rdfs:range    rdf:Literal .
+
+swp:residesAt  a      rdfs:Property ;
+        rdfs:comment  "Relates persons to their residence" ;
+        rdfs:domain   swp:Person ;
+        rdfs:range    swp:ResidentialUnit .
+
+swp:rents  a                rdfs:Property ;
+        rdfs:comment        "It inherits its domain (swp:Person) and range (swp:ResidentialUnit) from its superproperty (swp:residesAt)" ;
+        rdfs:subPropertyOf  swp:residesAt .
+
+# instances
+
+swp:BaronWayBuilding  a       swp:ResidentialUnit ;
+        dbpedia-owl:location  dbpedia:Amsterdam , dbpedia:Netherlands .
+
+swp:BaronWayApartment
+        a                        swp:Apartment ;
+        rdfs:label               "Baron Way Apartment for Rent" ;
+        swp:address              "4 Baron Way Circle" ;
+        swp:hasNumberOfBedrooms  3 ;
+        swp:isPartOf             swp:BaronWayBuilding .
+
+swp:JeffMeyer  a   swp:Person ;
+        swp:rents  swp:BaronWayApartment .
+
+swp:FloridaAveStudio  a           swp:LuxuryApartment ;
+        dbpedia-owl:locationCity  dbpedia:Amsterdam ;
+        swp:hasNumberOfBedrooms   1 .
+
+swp:VSSpaciousSuite a swp:LuxuryApartment;
+        dbpedia-owl:locationCity  dbpedia:Galle ;
+        swp:hasNumberOfBedrooms 1.
+
+swp:VillaPinthaliya a swp:Apartment;
+        dbpedia-owl:location  dbpedia:SriLanka ;
+        swp:hasNumberOfBedrooms 3.
+
+
+
+
+
+
