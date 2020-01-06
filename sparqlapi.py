@@ -86,7 +86,24 @@ def searchByAddress(address):
     results = sparql.query().convert()
     return results
 
-    
+ def searchByAddress(bedRoomCount,location):
+    query="""
+            PREFIX swp: <http://www.semanticwebprimer.org/ontology/apartments.ttl#>
+            PREFIX dbpedia: <http://dbpedia.org/resource/>
+            PREFIX dbpedia-owl: <http://dbpedia.org/ontology/>
+            PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+            SELECT ?apartment ?address WHERE {{ 
+                ?apartment swp:hasNumberOfBedrooms  {bedRoomCount} .
+                {{?apartment dbpedia-owl:location  dbpedia:{location} .}}
+                UNION
+                {{?apartment dbpedia-owl:locationCity dbpedia:{location} .}} 
+            }}
+        """.format(bedRoomCount=bedRoomCount,location=location)
+    sparql.setQuery(query)
+    sparql.setReturnFormat(JSON)
+    results = sparql.query().convert()
+    return results
+
 # for result in results['results']['bindings']:
 #     print(result['bedrooms']['value'])
 #     print(result['apartment']['value'])
